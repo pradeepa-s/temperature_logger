@@ -308,6 +308,9 @@ void _Error_Handler(char * file, int line)
   /* User can add his own implementation to report the HAL error return state */
   while(1) 
   {
+	  HAL_Delay(250);
+
+	  HAL_GPIO_TogglePin(LD_R_GPIO_Port, LD_R_Pin);
   }
   /* USER CODE END Error_Handler_Debug */ 
 }
