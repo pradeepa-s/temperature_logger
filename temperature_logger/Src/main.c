@@ -107,7 +107,7 @@ int main(void)
 
 	  HAL_GPIO_TogglePin(LD_G_GPIO_Port, LD_G_Pin);
 
-	  HAL_UART_Transmit(&huart1, msg, msg_size, 1000);
+	  printf("I'm printf!!!\r\n");
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
