@@ -10,8 +10,6 @@
 #t#t PB13#t ------> SPI2_SCK
 #t#t PB14#t ------> SPI2_MISO
 #t#t PB15#t ------> SPI2_MOSI
-#t#t PA9#t ------> USART1_TX
-#t#t PA10#t ------> USART1_RX
 #t#t PA15#t ------> SPI1_NSS
 #t#t PB3#t ------> SPI1_SCK
 #t#t PB5#t ------> SPI1_MOSI
@@ -79,13 +77,6 @@ static void MX_GPIO_Init(void)
 #tGPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 #tGPIO_InitStruct.Alternate = GPIO_AF0_SPI2;
 #tHAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-#n#t/*Configure GPIO pins : USART_TX_Pin USART_RX_Pin */
-#tGPIO_InitStruct.Pin = USART_TX_Pin|USART_RX_Pin;
-#tGPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-#tGPIO_InitStruct.Pull = GPIO_NOPULL;
-#tGPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-#tGPIO_InitStruct.Alternate = GPIO_AF4_USART1;
-#tHAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 #n#t/*Configure GPIO pin : ePD1_CS_Pin */
 #tGPIO_InitStruct.Pin = ePD1_CS_Pin;
 #tGPIO_InitStruct.Mode = GPIO_MODE_AF_PP;

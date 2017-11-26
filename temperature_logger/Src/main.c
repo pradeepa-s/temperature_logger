@@ -45,6 +45,7 @@
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
+UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
@@ -54,6 +55,7 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_USART1_UART_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -84,11 +86,14 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
+  uint8_t msg[] = "Hello world\n\r";
+  uint16_t msg_size = sizeof(msg);
 
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_USART1_UART_Init();
 
   /* USER CODE BEGIN 2 */
 
@@ -101,6 +106,8 @@ int main(void)
 	  HAL_Delay(250);
 
 	  HAL_GPIO_TogglePin(LD_G_GPIO_Port, LD_G_Pin);
+
+	  HAL_UART_Transmit(&huart1, msg, msg_size, 1000);
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
@@ -117,6 +124,7 @@ void SystemClock_Config(void)
 
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
+  RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
     /**Configure the main internal regulator output voltage 
     */
@@ -150,6 +158,13 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1;
+  PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
     /**Configure the Systick interrupt time 
     */
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
@@ -160,6 +175,27 @@ void SystemClock_Config(void)
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+}
+
+/* USART1 init function */
+static void MX_USART1_UART_Init(void)
+{
+
+  huart1.Instance = USART1;
+  huart1.Init.BaudRate = 115200;
+  huart1.Init.WordLength = UART_WORDLENGTH_8B;
+  huart1.Init.StopBits = UART_STOPBITS_1;
+  huart1.Init.Parity = UART_PARITY_NONE;
+  huart1.Init.Mode = UART_MODE_TX_RX;
+  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart1) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
 }
 
 /** Configure pins as 
@@ -178,8 +214,6 @@ void SystemClock_Config(void)
      PB13   ------> SPI2_SCK
      PB14   ------> SPI2_MISO
      PB15   ------> SPI2_MOSI
-     PA9   ------> USART1_TX
-     PA10   ------> USART1_RX
      PA15   ------> SPI1_NSS
      PB3   ------> SPI1_SCK
      PB5   ------> SPI1_MOSI
@@ -258,14 +292,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   GPIO_InitStruct.Alternate = GPIO_AF0_SPI2;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : USART_TX_Pin USART_RX_Pin */
-  GPIO_InitStruct.Pin = USART_TX_Pin|USART_RX_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF4_USART1;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : ePD1_CS_Pin */
   GPIO_InitStruct.Pin = ePD1_CS_Pin;
