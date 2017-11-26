@@ -103,6 +103,7 @@ int main(void)
   MX_RTC_Init();
 
   /* USER CODE BEGIN 2 */
+
   show_time();
   set_alarm();
   /* USER CODE END 2 */

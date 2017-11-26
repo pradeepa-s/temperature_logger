@@ -10,18 +10,6 @@
 
 extern UART_HandleTypeDef huart1;
 
-int _write(int file, char *ptr, int len)
-{
-	int DataIdx;
-
-	for (DataIdx = 0; DataIdx < len; DataIdx++){
-		__io_putchar(*ptr++);
-	}
-
-	return len;
-
-}
-
 int __io_putchar(int ch)
 {
 
@@ -35,4 +23,18 @@ int __io_putchar(int ch)
 
 	return 0;
 
+}
+
+int __io_getchar(void)
+{
+	uint8_t data;
+
+	uint16_t size = sizeof(data);
+
+	uint32_t timeout = 0xFFFFFFFF;
+
+	HAL_UART_Receive(&huart1, &data, size, timeout);
+	HAL_UART_Transmit(&huart1, &data, size, timeout);
+
+	return data;
 }
