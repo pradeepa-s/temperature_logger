@@ -1,0 +1,34 @@
+Add component (AddParameter): Name = "Digikey_link"; Value = "https://www.digikey.com.au/product-detail/en/kemet/C0805C102K1RACTU/399-1148-2-ND/411147"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "KEMET"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "C0805C102K1RACTU"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "C0805"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "0.035 USD"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "1000 pF"; VariantName = "[No Variations]"
+Added Component: Designator=C210(C0805)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Digikey_link"; Value = "https://www.digikey.com.au/product-detail/en/kemet/C0805C102K1RACTU/399-1148-2-ND/411147"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "KEMET"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "C0805C102K1RACTU"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "C0805"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "0.035 USD"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "1000 pF"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Digikey_link"; Value = "https://www.digikey.com.au/product-detail/en/kemet/C0805C470JDGACTU/399-7157-1-ND/3439404"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "KEMET"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "C0805C470JDGACTU"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "C0805"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "0.62 AUD"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "47 pF"; VariantName = "[No Variations]"
+Added Component: Designator=C211(C0805)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Digikey_link"; Value = "https://www.digikey.com.au/product-detail/en/kemet/C0805C470JDGACTU/399-7157-1-ND/3439404"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "KEMET"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "C0805C470JDGACTU"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "C0805"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "0.62 AUD"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "47 pF"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=C210-1
+Added Pin To Net: NetName=5V Pin=C210-2
+Added Pin To Net: NetName=GND Pin=C211-1
+Added Pin To Net: NetName=5V Pin=C211-2
+Added Member To Class: ClassName=02_MCU Member=Component C210 1000 pF
+Added Member To Class: ClassName=02_MCU Member=Component C211 47 pF

@@ -1,0 +1,10 @@
+Output: Bill of Materials
+Type  : BOM
+From  : Variant [[No Variations]] of Project [temperature_logger.PrjPcb]
+   Generated File[Bill of Materials-temperature_logger.xlsx]
+
+
+Files Generated   : 1
+Documents Printed : 0
+
+Finished Output Generation At 10:20:27 AM On 10/7/2018

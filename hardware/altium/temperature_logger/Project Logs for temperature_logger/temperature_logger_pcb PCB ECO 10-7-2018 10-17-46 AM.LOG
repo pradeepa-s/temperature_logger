@@ -1,0 +1,13 @@
+Change component parameters (AddParameter): Name = "Digikey_link"; Value = "Good"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Manufacturer"; Value = "FTDI"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Manufacturer Part Number"; Value = "FT231XS-R"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Package"; Value = "SSOP-20 FTDI"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Price"; Value = "1.80 USD"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Value"; Value = "FT231"; VariantName = "[No Variations]"
+Change component parameters. Clean all parameters for all variants
+Change component parameters (AddParameter): Name = "Digikey_link"; Value = "Good"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Manufacturer"; Value = "FTDI"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Manufacturer Part Number"; Value = "FT231XS-R"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Package"; Value = "SSOP-20 FTDI"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Price"; Value = "1.80 USD"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Value"; Value = "FT231"; VariantName = "[No Variations]"

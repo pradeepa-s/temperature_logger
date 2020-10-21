@@ -1,0 +1,9 @@
+Change Component Designator: OldDesignator=200 NewDesignator=U?
+Change Component Designator: OldDesignator=P100 NewDesignator=USB_POW
+Change Component Designator: OldDesignator=P101 NewDesignator=BAT
+Change Component Designator: OldDesignator=P200 NewDesignator=BOOT
+Change Component Designator: OldDesignator=P201 NewDesignator=JTAG
+Change Net Name : Old Net Name=Net200_P$8 New Net Name=NetR210_1
+Change Net Name : Old Net Name=Net200_P$9 New Net Name=NetR209_1
+Change Net Name : Old Net Name=Net200_P$11 New Net Name=NetR208_2
+Added Member To Class: ClassName=02_MCU Member=Component J200 MicroSD

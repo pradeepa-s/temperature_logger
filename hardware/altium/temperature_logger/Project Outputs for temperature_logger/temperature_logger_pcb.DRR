@@ -1,0 +1,17 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: temperature_logger_pcb.PcbDoc   10/7/2018  10:06:21 AM
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : temperature_logger_pcb.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T3      0.4mm (16mil)                                             Round             45        PTH        187.07mm (7.37inch)
+T4      0.9mm (35mil)                                             Round             11        PTH        72.67mm (2.86inch)
+T1      0.35mm (14mil)                                            Round             2         NPTH       7.30mm (0.29inch)
+T2      0.5mm (20mil)                                             Round             2         NPTH       6.50mm (0.26inch)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              60
+
+Total Processing Time (hh:mm:ss) : 00:00:00

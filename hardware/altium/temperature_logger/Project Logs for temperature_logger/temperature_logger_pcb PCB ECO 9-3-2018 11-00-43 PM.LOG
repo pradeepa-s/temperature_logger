@@ -1,0 +1,7 @@
+Change Physical Footprint: Designator=J100 Old Footprint=MicroUSB New Footprint=MicroUSB
+Change Physical Footprint: Designator=J200 Old Footprint=MicroSD New Footprint=MicroSD
+Change Physical Footprint: Designator=S200 Old Footprint=Tactile1 New Footprint=Tactile1
+Change Physical Footprint: Designator=U200 Old Footprint=LQFP48-7x7mm New Footprint=LQFP48-7x7mm
+Change Physical Footprint: Designator=U201 Old Footprint=SOT563 New Footprint=SOT563
+Change Physical Footprint: Designator=U202 Old Footprint=8-SOIC New Footprint=8-SOIC
+Change Physical Footprint: Designator=U203 Old Footprint=SSOP20 New Footprint=SSOP20

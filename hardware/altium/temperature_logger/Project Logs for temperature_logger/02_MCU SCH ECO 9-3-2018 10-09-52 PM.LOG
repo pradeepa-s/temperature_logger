@@ -1,0 +1,34 @@
+Replace Part BOOT Header 2 in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Header 2 from Miscellaneous Connectors.IntLib
+Replace Part C200 Cap-1000pF in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Cap-1000pF from temperature_logger_lib.IntLib
+Replace Part C201 Cap-1000pF in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Cap-1000pF from temperature_logger_lib.IntLib
+Replace Part C202 Cap-1000pF in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Cap-1000pF from temperature_logger_lib.IntLib
+Replace Part C203 Cap-1000pF in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Cap-1000pF from temperature_logger_lib.IntLib
+Replace Part C204 Cap-1000pF in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Cap-1000pF from temperature_logger_lib.IntLib
+Replace Part C205 Cap-1000pF in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Cap-1000pF from temperature_logger_lib.IntLib
+Replace Part C206 Cap-1000pF in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Cap-1000pF from temperature_logger_lib.IntLib
+Replace Part C207 Cap-1000pF in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Cap-1000pF from temperature_logger_lib.IntLib
+Replace Part C208 Cap-1000pF in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Cap-1000pF from temperature_logger_lib.IntLib
+Replace Part C209 Cap-100nF in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Cap-100nF from temperature_logger_lib.IntLib
+Replace Part C210 Cap-1000pF in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Cap-1000pF from temperature_logger_lib.IntLib
+Replace Part C211 Cap-47pF in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Cap-47pF from temperature_logger_lib.IntLib
+Replace Part D200 LGR971 in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with LGR971 from temperature_logger_lib.IntLib
+Replace Part J200 MicroSD in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with MicroSD from temperature_logger_lib.IntLib
+Replace Part JTAG Header 5 in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Header 5 from Miscellaneous Connectors.IntLib
+Replace Part R200 Res-5k in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Res-5k from temperature_logger_lib.IntLib
+Replace Part R201 Res-5k in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Res-5k from temperature_logger_lib.IntLib
+Replace Part R202 Res-5k in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Res-5k from temperature_logger_lib.IntLib
+Replace Part R203 Res-1k in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Res-1k from temperature_logger_lib.IntLib
+Replace Part R204 Res-1k in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Res-1k from temperature_logger_lib.IntLib
+Replace Part R205 Res-1k in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Res-1k from temperature_logger_lib.IntLib
+Replace Part R206 Res-1k in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Res-1k from temperature_logger_lib.IntLib
+Replace Part R207 Res-10k in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Res-10k from temperature_logger_lib.IntLib
+Replace Part R208 Res-1k in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Res-1k from temperature_logger_lib.IntLib
+Replace Part R209 Res-27 in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Res-27 from temperature_logger_lib.IntLib
+Replace Part R210 Res-27 in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Res-27 from temperature_logger_lib.IntLib
+Replace Part R211 Res-1k in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Res-1k from temperature_logger_lib.IntLib
+Replace Part S200 Switch_tactile in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with Switch_tactile from temperature_logger_lib.IntLib
+Replace Part U200 STM32L0x3CL4 in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with STM32L0x3CL4 from temperature_logger_lib.IntLib
+Replace Part U200 STM32L0x3CL4 in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with STM32L0x3CL4 from temperature_logger_lib.IntLib
+Replace Part U201 TMP112AIDRLT in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with TMP112AIDRLT from temperature_logger_lib.IntLib
+Replace Part U202 MX25R1635 in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with MX25R1635 from temperature_logger_lib.IntLib
+Replace Part U203 FT231XS-R in I:\my_projects\temperature_logger\templogger\02_Hardware\altium\temperature_logger\02_MCU.SchDoc with FT231XS-R from temperature_logger_lib.IntLib
