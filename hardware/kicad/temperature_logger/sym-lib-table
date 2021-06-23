@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name temperature_logger)(type Legacy)(uri ${KIPRJMOD}/temperature_logger.lib)(options "")(descr ""))
+)

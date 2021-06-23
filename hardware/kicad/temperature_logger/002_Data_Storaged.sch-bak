@@ -1,0 +1,124 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 3 3
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L temperature_logger:MX25R1635FM1IL0 U?
+U 1 1 60E21488
+P 2950 3850
+F 0 "U?" H 2600 3500 50  0000 L CNN
+F 1 "MX25R1635FM1IL0" H 2300 3400 50  0000 L CNN
+F 2 "Package_SO:SOP-8_3.9x4.9mm_P1.27mm" H 2950 3250 50  0001 C CNN
+F 3 "http://www.macronix.com/Lists/Datasheet/Attachments/7534/MX25R3235F,%20Wide%20Range,%2032Mb,%20v1.6.pdf" H 2950 3850 50  0001 C CNN
+	1    2950 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR?
+U 1 1 60E2148E
+P 3150 3200
+F 0 "#PWR?" H 3150 3050 50  0001 C CNN
+F 1 "+3V3" H 3165 3373 50  0000 C CNN
+F 2 "" H 3150 3200 50  0001 C CNN
+F 3 "" H 3150 3200 50  0001 C CNN
+	1    3150 3200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3150 3200 3150 3450
+$Comp
+L power:GND #PWR?
+U 1 1 60E21495
+P 3150 4400
+F 0 "#PWR?" H 3150 4150 50  0001 C CNN
+F 1 "GND" H 3155 4227 50  0000 C CNN
+F 2 "" H 3150 4400 50  0001 C CNN
+F 3 "" H 3150 4400 50  0001 C CNN
+	1    3150 4400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3150 4250 3150 4400
+$Comp
+L Device:C_Small C?
+U 1 1 60E2149C
+P 2550 3000
+F 0 "C?" H 2642 3046 50  0000 L CNN
+F 1 "C_Small" H 2642 2955 50  0000 L CNN
+F 2 "" H 2550 3000 50  0001 C CNN
+F 3 "~" H 2550 3000 50  0001 C CNN
+	1    2550 3000
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR?
+U 1 1 60E214A2
+P 2550 2800
+F 0 "#PWR?" H 2550 2650 50  0001 C CNN
+F 1 "+3V3" H 2565 2973 50  0000 C CNN
+F 2 "" H 2550 2800 50  0001 C CNN
+F 3 "" H 2550 2800 50  0001 C CNN
+	1    2550 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 60E214A8
+P 2550 3200
+F 0 "#PWR?" H 2550 2950 50  0001 C CNN
+F 1 "GND" H 2555 3027 50  0000 C CNN
+F 2 "" H 2550 3200 50  0001 C CNN
+F 3 "" H 2550 3200 50  0001 C CNN
+	1    2550 3200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2550 3200 2550 3100
+Wire Wire Line
+	2550 2900 2550 2800
+Wire Wire Line
+	2450 3650 2250 3650
+Wire Wire Line
+	2450 3750 2250 3750
+Wire Wire Line
+	2450 3850 2250 3850
+Wire Wire Line
+	3450 3850 3550 3850
+Wire Notes Line
+	1500 2500 1500 4850
+Wire Notes Line
+	1500 4850 4000 4850
+Wire Notes Line
+	4000 4850 4000 2500
+Wire Notes Line
+	4000 2500 1500 2500
+Text Notes 1650 4750 0    50   ~ 10
+SPI flash\n
+Wire Wire Line
+	2450 3950 2250 3950
+Wire Wire Line
+	2450 4050 2250 4050
+Text HLabel 2250 3650 0    50   Input ~ 0
+FLASH_SI
+Text HLabel 2250 3750 0    50   Input ~ 0
+FLASH_SCLK
+Text HLabel 2250 3950 0    50   Input ~ 0
+FLASH_WPN
+Text HLabel 2250 4050 0    50   Input ~ 0
+FLASH_RSTN
+Text HLabel 2250 3850 0    50   Input ~ 0
+FLASH_CSN
+Text HLabel 3550 3850 2    50   Input ~ 0
+FLASH_SO
+$EndSCHEMATC
