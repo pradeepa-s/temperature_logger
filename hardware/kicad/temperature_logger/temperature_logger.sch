@@ -652,15 +652,11 @@ NoConn ~ 8500 2900
 NoConn ~ 8500 3000
 Wire Wire Line
 	8500 3600 8000 3600
-Wire Wire Line
-	9700 3700 10250 3700
 Text Label 8000 3600 0    50   ~ 0
-USER_LED2
-Text Label 10250 3700 2    50   ~ 0
 USER_LED1
 Wire Wire Line
-	9700 3200 10250 3200
-Text Label 10250 3200 2    50   ~ 0
+	9700 4400 10250 4400
+Text Label 10250 4400 2    50   ~ 0
 USER_BTN
 Wire Wire Line
 	2800 6100 2800 6300
@@ -779,8 +775,8 @@ FLASH_WPN
 Text Label 8000 3400 0    50   ~ 0
 FLASH_RSTN
 Wire Wire Line
-	8500 3200 8000 3200
-Text Label 8000 3200 0    50   ~ 0
+	8500 3800 8000 3800
+Text Label 8000 3800 0    50   ~ 0
 TMP_ALERT
 Wire Wire Line
 	9300 4900 9300 5150
@@ -797,14 +793,11 @@ Text Label 10250 4500 2    50   ~ 0
 SWDIO
 Text Label 10250 4600 2    50   ~ 0
 SWCLK
-NoConn ~ 8500 3500
 NoConn ~ 8500 3700
-NoConn ~ 8500 3800
 NoConn ~ 8500 3900
 NoConn ~ 8500 4200
 NoConn ~ 8500 4300
 NoConn ~ 9700 4700
-NoConn ~ 9700 4400
 NoConn ~ 9700 4300
 NoConn ~ 9700 4000
 NoConn ~ 9700 3900
@@ -819,7 +812,7 @@ U 1 1 60DEE903
 P 1250 7250
 F 0 "J1" H 1358 7631 50  0000 C CNN
 F 1 "SWD" H 1358 7540 50  0000 C CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x06_P1.27mm_Vertical" H 1250 7250 50  0001 C CNN
+F 2 "Connector_PinHeader_1.27mm:PinHeader_1x05_P1.27mm_Vertical" H 1250 7250 50  0001 C CNN
 F 3 "~" H 1250 7250 50  0001 C CNN
 	1    1250 7250
 	1    0    0    -1  
@@ -931,4 +924,11 @@ Wire Wire Line
 	2850 7250 3050 7250
 Wire Wire Line
 	3050 7250 3050 7300
+Text Label 8000 3500 0    50   ~ 0
+USER_LED2
+NoConn ~ 9700 3700
+Wire Wire Line
+	8500 3500 8000 3500
+NoConn ~ 9700 3200
+NoConn ~ 8500 3200
 $EndSCHEMATC

@@ -394,7 +394,7 @@ AR Path="/60C970F5" Ref="C?"  Part="1"
 AR Path="/60D5E44C/60C970F5" Ref="C11"  Part="1" 
 F 0 "C11" H 7742 2596 50  0000 L CNN
 F 1 "47p" H 7742 2505 50  0000 L CNN
-F 2 "Capacitor_SMD:CP_Elec_4x5.7" H 7650 2550 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 7650 2550 50  0001 C CNN
 F 3 "~" H 7650 2550 50  0001 C CNN
 	1    7650 2550
 	1    0    0    -1  
@@ -422,7 +422,7 @@ AR Path="/60C9866F" Ref="C?"  Part="1"
 AR Path="/60D5E44C/60C9866F" Ref="C12"  Part="1" 
 F 0 "C12" H 7992 2596 50  0000 L CNN
 F 1 "47p" H 7992 2505 50  0000 L CNN
-F 2 "Capacitor_SMD:CP_Elec_4x5.7" H 7900 2550 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 7900 2550 50  0001 C CNN
 F 3 "~" H 7900 2550 50  0001 C CNN
 	1    7900 2550
 	1    0    0    -1  
@@ -755,7 +755,7 @@ AR Path="/60CC9B9E" Ref="C?"  Part="1"
 AR Path="/60D5E44C/60CC9B9E" Ref="C15"  Part="1" 
 F 0 "C15" H 10491 2696 50  0000 L CNN
 F 1 "4.7uF" H 10491 2605 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 10400 2650 50  0001 C CNN
+F 2 "Capacitor_SMD:CP_Elec_4x5.7" H 10400 2650 50  0001 C CNN
 F 3 "~" H 10400 2650 50  0001 C CNN
 	1    10400 2650
 	1    0    0    -1  
