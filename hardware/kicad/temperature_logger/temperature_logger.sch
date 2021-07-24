@@ -178,17 +178,6 @@ Wire Wire Line
 Text Label 2050 6100 2    50   ~ 0
 USER_LED1
 $Comp
-L Switch:SW_Push SW1
-U 1 1 60C6A850
-P 2800 5500
-F 0 "SW1" V 2754 5648 50  0000 L CNN
-F 1 "UserBtn" V 2845 5648 50  0000 L CNN
-F 2 "Button_Switch_SMD:SW_SPST_Omron_B3FS-101xP" H 2800 5700 50  0001 C CNN
-F 3 "~" H 2800 5700 50  0001 C CNN
-	1    2800 5500
-	0    1    1    0   
-$EndComp
-$Comp
 L power:GND #PWR010
 U 1 1 60C6CACA
 P 2800 6350
@@ -210,10 +199,6 @@ F 3 "~" H 2800 6000 50  0001 C CNN
 	1    2800 6000
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	2800 5700 2800 5750
-Wire Wire Line
-	2800 5250 2800 5300
 $Comp
 L Device:C_Small C2
 U 1 1 60C74FF5
@@ -445,17 +430,6 @@ F 1 "VDC" H 2865 3773 50  0000 C CNN
 F 2 "" H 2850 3600 50  0001 C CNN
 F 3 "" H 2850 3600 50  0001 C CNN
 	1    2850 3600
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:VDC #PWR09
-U 1 1 60CD3BDE
-P 2800 5250
-F 0 "#PWR09" H 2800 5150 50  0001 C CNN
-F 1 "VDC" H 2815 5423 50  0000 C CNN
-F 2 "" H 2800 5250 50  0001 C CNN
-F 3 "" H 2800 5250 50  0001 C CNN
-	1    2800 5250
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -812,7 +786,7 @@ U 1 1 60DEE903
 P 1250 7250
 F 0 "J1" H 1358 7631 50  0000 C CNN
 F 1 "SWD" H 1358 7540 50  0000 C CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x05_P1.27mm_Vertical" H 1250 7250 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 1250 7250 50  0001 C CNN
 F 3 "~" H 1250 7250 50  0001 C CNN
 	1    1250 7250
 	1    0    0    -1  
@@ -902,7 +876,7 @@ U 1 1 60D0250A
 P 2650 7150
 F 0 "J4" H 2758 7431 50  0000 C CNN
 F 1 "UART" H 2758 7340 50  0000 C CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x03_P1.27mm_Vertical" H 2650 7150 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 2650 7150 50  0001 C CNN
 F 3 "~" H 2650 7150 50  0001 C CNN
 	1    2650 7150
 	1    0    0    -1  
@@ -931,4 +905,40 @@ Wire Wire Line
 	8500 3500 8000 3500
 NoConn ~ 9700 3200
 NoConn ~ 8500 3200
+$Comp
+L Switch:SW_MEC_5E SW1
+U 1 1 60D808BB
+P 2850 5300
+F 0 "SW1" V 2896 5212 50  0000 R CNN
+F 1 "SW_MEC_5E" V 2805 5212 50  0000 R CNN
+F 2 "Button_Switch_SMD:SW_SPST_Omron_B3FS-101xP" H 2850 5600 50  0001 C CNN
+F 3 "http://www.apem.com/int/index.php?controller=attachment&id_attachment=1371" H 2850 5600 50  0001 C CNN
+	1    2850 5300
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	2750 5500 2800 5500
+Wire Wire Line
+	2750 5100 2800 5100
+$Comp
+L power:VDC #PWR09
+U 1 1 60D9A862
+P 2800 4950
+F 0 "#PWR09" H 2800 4850 50  0001 C CNN
+F 1 "VDC" H 2815 5123 50  0000 C CNN
+F 2 "" H 2800 4950 50  0001 C CNN
+F 3 "" H 2800 4950 50  0001 C CNN
+	1    2800 4950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2800 4950 2800 5100
+Connection ~ 2800 5100
+Wire Wire Line
+	2800 5100 2850 5100
+Wire Wire Line
+	2800 5500 2800 5750
+Connection ~ 2800 5500
+Wire Wire Line
+	2800 5500 2850 5500
 $EndSCHEMATC
