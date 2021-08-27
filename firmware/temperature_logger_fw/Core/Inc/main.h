@@ -58,6 +58,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define SPI_CSN_Pin GPIO_PIN_12
+#define SPI_CSN_GPIO_Port GPIOB
 #define USER_BUTTON_Pin GPIO_PIN_12
 #define USER_BUTTON_GPIO_Port GPIOA
 #define USER_BUTTON_EXTI_IRQn EXTI4_15_IRQn

@@ -19,11 +19,14 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "spi.h"
+#include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "button.h"
+#include "storage.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,7 +46,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint8_t write = 0;
+uint8_t read = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,6 +61,14 @@ void device_event(uint32_t event);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	process_button_event();
+}
+
+void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim == &htim2 && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
+	{
+		button_press_and_hold();
+	}
 }
 /* USER CODE END 0 */
 
@@ -88,14 +100,35 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_TIM2_Init();
+  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
   button_init(device_event);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  erase_first_sector();
+
+  uint32_t date = 0;
+  int val = 1;
+  const storage_values* vals = 0;
   while (1)
   {
+	  if (write)
+	  {
+		  temperature_reading temp = {date, val};
+		  storage_write(temp);
+		  date++;
+		  val += 2;
+		  write = 0;
+	  }
+
+	  if (read)
+	  {
+		  vals = storage_read(0, 3);
+		  read = 0;
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -147,6 +180,13 @@ void device_event(uint32_t event)
 	if (event == 1)
 	{
 		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+		write = 1;
+	}
+
+	if (event == 2)
+	{
+		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+		read = 1;
 	}
 }
 /* USER CODE END 4 */

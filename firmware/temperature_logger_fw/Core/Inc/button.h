@@ -11,6 +11,7 @@
 #include "device_events.h"
 
 void process_button_event(void);
+void button_press_and_hold(void);
 void button_init(event_cb cb);
 
 #endif /* INC_BUTTON_H_ */
