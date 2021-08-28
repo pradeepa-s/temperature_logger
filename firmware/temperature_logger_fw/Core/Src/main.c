@@ -21,12 +21,14 @@
 #include "main.h"
 #include "spi.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "button.h"
 #include "storage.h"
+#include "pc_comms.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -102,6 +104,7 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
   MX_SPI2_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   button_init(device_event);
   /* USER CODE END 2 */
@@ -127,6 +130,10 @@ int main(void)
 	  if (read)
 	  {
 		  vals = storage_read(0, 3);
+		  for (int i = 0; i < vals->count; i++)
+		  {
+			  send_temperature_reading(&(vals->readings[i]));
+		  }
 		  read = 0;
 	  }
     /* USER CODE END WHILE */
@@ -144,6 +151,7 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
   /** Configure the main internal regulator output voltage
   */
@@ -169,6 +177,12 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1;
+  PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
   }
