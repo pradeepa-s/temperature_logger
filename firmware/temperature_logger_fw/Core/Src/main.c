@@ -49,7 +49,7 @@
 
 /* USER CODE BEGIN PV */
 uint8_t write = 0;
-uint8_t read = 0;
+uint8_t read_all = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -115,7 +115,6 @@ int main(void)
 
   uint32_t date = 0;
   int val = 1;
-  const storage_values* vals = 0;
   while (1)
   {
 	  if (write)
@@ -127,14 +126,20 @@ int main(void)
 		  write = 0;
 	  }
 
-	  if (read)
+	  if (read_all)
 	  {
-		  vals = storage_read(0, 3);
-		  for (int i = 0; i < vals->count; i++)
-		  {
-			  send_temperature_reading(&(vals->readings[i]));
-		  }
-		  read = 0;
+          const storage_values* vals = 0;
+		  vals = storage_read_start();
+
+          while (vals -> count != 0)
+          {
+              for (int i = 0; i < vals->count; i++)
+              {
+                  send_temperature_reading(&(vals->readings[i]));
+              }
+              vals = storage_read_cont();
+          }
+		  read_all = 0;
 	  }
     /* USER CODE END WHILE */
 
@@ -200,7 +205,7 @@ void device_event(uint32_t event)
 	if (event == 2)
 	{
 		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-		read = 1;
+		read_all = 1;
 	}
 }
 /* USER CODE END 4 */

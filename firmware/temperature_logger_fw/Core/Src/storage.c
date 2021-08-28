@@ -18,8 +18,10 @@ static void _spi_flash_cs_low();
 static void _spi_flash_cs_high();
 static void write_enable();
 static void wait_for_write();
+static const storage_values* read_from_address(uint32_t read_address);
 
 static uint32_t write_address = 0x0;
+static uint32_t read_address = 0x0;
 
 uint8_t storage_write(temperature_reading data)
 {
@@ -54,11 +56,13 @@ uint8_t write_to_flash(temperature_reading data, uint32_t address)
 	return 0;
 }
 
-const storage_values* storage_read(uint32_t datetime, size_t count)
+const storage_values* storage_read(uint32_t datetime)
 {
-	uint32_t read_address = 0x00;
-	temp_readings.count = 0;
+    return read_from_address(0);
+}
 
+const storage_values* read_from_address(uint32_t read_address)
+{
 	uint8_t read_command[4];
 
 	read_command[0] = 0x03;
@@ -68,9 +72,18 @@ const storage_values* storage_read(uint32_t datetime, size_t count)
 
 	_spi_flash_cs_low();
 	HAL_SPI_Transmit(&hspi2, read_command, sizeof(read_command), 0xFFFFFFFF);
+	HAL_SPI_Receive(&hspi2, (uint8_t*)temp_readings.readings, 10 * sizeof(temperature_reading), 0xFFFFFFFF);
 
-	HAL_SPI_Receive(&hspi2, (uint8_t*)temp_readings.readings, count * sizeof(temperature_reading), 0xFFFFFFFF);
-	temp_readings.count = count;
+    int read_count = 0;
+    for (read_count = 0; read_count < _MAXIMUM_READ_COUNT; read_count++)
+    {
+        if (temp_readings.readings[read_count].datetime == 0xFFFFFFFF)
+        {
+            break;
+        }
+    }
+
+	temp_readings.count = read_count;
 
 	return &temp_readings;
 }
@@ -92,6 +105,19 @@ void erase_first_sector()
 	_spi_flash_cs_high();
 
 	wait_for_write();
+}
+
+const storage_values* storage_read_start()
+{
+	read_address = 0x00;
+    return storage_read_cont();
+}
+
+const storage_values* storage_read_cont()
+{
+    read_from_address(read_address);
+    read_address += temp_readings.count * sizeof(temperature_reading);
+    return &temp_readings;
 }
 
 uint32_t get_write_address()

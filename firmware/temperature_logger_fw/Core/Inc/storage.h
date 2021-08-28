@@ -26,7 +26,11 @@ typedef struct _values
 } storage_values;
 
 uint8_t storage_write(temperature_reading data);
-const storage_values* storage_read(uint32_t datetime, size_t count);
+
+const storage_values* storage_read(uint32_t datetime);
+const storage_values* storage_read_start();
+const storage_values* storage_read_cont();
+
 void erase_first_sector();
 
 #endif /* INC_STORAGE_H_ */
