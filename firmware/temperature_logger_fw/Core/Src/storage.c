@@ -72,7 +72,8 @@ const storage_values* read_from_address(uint32_t read_address)
 
 	_spi_flash_cs_low();
 	HAL_SPI_Transmit(&hspi2, read_command, sizeof(read_command), 0xFFFFFFFF);
-	HAL_SPI_Receive(&hspi2, (uint8_t*)temp_readings.readings, 10 * sizeof(temperature_reading), 0xFFFFFFFF);
+	HAL_SPI_Receive(&hspi2, (uint8_t*)temp_readings.readings, _MAXIMUM_READ_COUNT * sizeof(temperature_reading), 0xFFFFFFFF);
+	_spi_flash_cs_high();
 
     int read_count = 0;
     for (read_count = 0; read_count < _MAXIMUM_READ_COUNT; read_count++)
@@ -109,7 +110,7 @@ void erase_first_sector()
 
 const storage_values* storage_read_start()
 {
-	read_address = 0x00;
+	read_address = 0;
     return storage_read_cont();
 }
 
