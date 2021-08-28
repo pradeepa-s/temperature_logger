@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
 #include "rtc.h"
 #include "spi.h"
 #include "tim.h"
@@ -31,6 +32,7 @@
 #include "storage.h"
 #include "pc_comms.h"
 #include "dev_time.h"
+#include "tmp112_sensor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -59,6 +61,8 @@ uint8_t log_temperature = 0;
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void process_device_event(uint32_t event);
+void tmp112_i2c_tx_func(uint8_t address, uint8_t* data, size_t size);
+void tmp112_i2c_rx_func(uint8_t address, uint8_t* read_data, size_t size);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -114,24 +118,26 @@ int main(void)
   MX_SPI2_Init();
   MX_USART1_UART_Init();
   MX_RTC_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
+  tmp112_sensor_init(0x48, tmp112_i2c_tx_func, tmp112_i2c_rx_func);
   button_init(process_device_event);
+  dev_time_init(process_device_event);
+  //erase_first_sector();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  dev_time_init(process_device_event);
-  erase_first_sector();
 
-  int val = 0;
   while (1)
   {
 	  if (log_temperature)
 	  {
 		  set_next_alarm();
-		  val += 1;
+		  double true_temp = tmp112_sensor_get_temperature();
+		  int32_t logged_temp = true_temp * 10000;
 		  uint32_t date = get_epoch_timestamp();
-		  temperature_reading temp = {date, val};
+		  temperature_reading temp = {date, logged_temp};
 		  storage_write(temp);
 		  log_temperature = 0;
 	  }
@@ -197,8 +203,10 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1|RCC_PERIPHCLK_RTC;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1|RCC_PERIPHCLK_I2C1
+                              |RCC_PERIPHCLK_RTC;
   PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
+  PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_PCLK1;
   PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
@@ -226,6 +234,16 @@ void process_device_event(uint32_t event)
 		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
 		log_temperature = 1;
 	}
+}
+
+void tmp112_i2c_tx_func(uint8_t address, uint8_t* data, size_t size)
+{
+	HAL_I2C_Master_Transmit(&hi2c1, (address << 1), data, size, 0xffffffff);
+}
+
+void tmp112_i2c_rx_func(uint8_t address, uint8_t* read_data, size_t size)
+{
+	HAL_I2C_Master_Receive(&hi2c1, (address << 1), read_data, size, 0xffffffff);
 }
 /* USER CODE END 4 */
 

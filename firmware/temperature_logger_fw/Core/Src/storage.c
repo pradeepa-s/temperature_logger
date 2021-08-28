@@ -46,6 +46,7 @@ uint8_t write_to_flash(temperature_reading data, uint32_t address)
 	page_program[1] = (write_address & 0x00FF0000) >> 16;
 	page_program[2] = (write_address & 0x0000FF00) >> 8;
 	page_program[3] = (write_address & 0x000000FF);
+
 	memcpy(&page_program[4], &data, sizeof(data));
 
 	_spi_flash_cs_low();
@@ -123,12 +124,17 @@ const storage_values* storage_read_cont()
 
 uint32_t get_write_address()
 {
+	write_address = *((int32_t*)(0x08080000));
 	return write_address;
 }
 
 void increment_last_modified_location()
 {
 	write_address += sizeof(temperature_reading);
+
+    HAL_FLASHEx_DATAEEPROM_Unlock();
+    HAL_FLASHEx_DATAEEPROM_Program(FLASH_TYPEPROGRAM_WORD, 0x08080000, write_address);
+    HAL_FLASHEx_DATAEEPROM_Lock();
 }
 
 void write_enable()
