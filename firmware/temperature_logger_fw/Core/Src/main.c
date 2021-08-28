@@ -30,6 +30,7 @@
 #include "button.h"
 #include "storage.h"
 #include "pc_comms.h"
+#include "dev_time.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -51,12 +52,13 @@
 /* USER CODE BEGIN PV */
 uint8_t write = 0;
 uint8_t read_all = 0;
+uint8_t log_temperature = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void device_event(uint32_t event);
+void process_device_event(uint32_t event);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -72,6 +74,11 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		button_press_and_hold();
 	}
+}
+
+void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
+{
+    rtc_alarm_elapsed();
 }
 /* USER CODE END 0 */
 
@@ -108,23 +115,25 @@ int main(void)
   MX_USART1_UART_Init();
   MX_RTC_Init();
   /* USER CODE BEGIN 2 */
-  button_init(device_event);
+  button_init(process_device_event);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  dev_time_init(process_device_event);
   erase_first_sector();
 
   int val = 0;
   while (1)
   {
-	  if (write)
+	  if (log_temperature)
 	  {
+		  set_next_alarm();
 		  val += 1;
 		  uint32_t date = get_epoch_timestamp();
 		  temperature_reading temp = {date, val};
 		  storage_write(temp);
-		  write = 0;
+		  log_temperature = 0;
 	  }
 
 	  if (read_all)
@@ -142,6 +151,7 @@ int main(void)
           }
 		  read_all = 0;
 	  }
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -197,18 +207,24 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void device_event(uint32_t event)
+void process_device_event(uint32_t event)
 {
-	if (event == 1)
+	if (event == DEVICE_EVENT_SINGLE_BUTTON_PRESS)
 	{
 		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-		write = 1;
+		log_temperature = 1;
 	}
 
-	if (event == 2)
+	if (event == DEVICE_EVENT_LONG_BUTTON_PRESS)
 	{
 		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
 		read_all = 1;
+	}
+
+	if (event == DEVICE_EVENT_RTC_ALARM_ELAPSED)
+	{
+		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+		log_temperature = 1;
 	}
 }
 /* USER CODE END 4 */

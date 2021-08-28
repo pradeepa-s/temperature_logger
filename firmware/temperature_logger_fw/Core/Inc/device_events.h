@@ -12,6 +12,7 @@
 
 #define DEVICE_EVENT_SINGLE_BUTTON_PRESS  (1)
 #define DEVICE_EVENT_LONG_BUTTON_PRESS    (2)
+#define DEVICE_EVENT_RTC_ALARM_ELAPSED    (3)
 
 typedef void (*event_cb)(uint32_t event_id);
 
