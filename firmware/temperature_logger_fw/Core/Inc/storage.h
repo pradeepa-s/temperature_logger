@@ -32,5 +32,6 @@ const storage_values* storage_read_start();
 const storage_values* storage_read_cont();
 
 void erase_first_sector();
+void storage_erase_full();
 
 #endif /* INC_STORAGE_H_ */

@@ -16,5 +16,6 @@ void init_next_temperature_log_time();
 void rtc_alarm_elapsed();
 void dev_time_init(event_cb cb);
 void set_next_alarm();
+void dev_time_set(uint8_t yy, uint8_t mm, uint8_t dd, uint8_t hh, uint8_t min, uint8_t ss);
 
 #endif /* INC_DEV_TIME_H_ */

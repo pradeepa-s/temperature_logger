@@ -92,6 +92,10 @@ const storage_values* read_from_address(uint32_t read_address)
 
 void erase_first_sector()
 {
+	HAL_FLASHEx_DATAEEPROM_Unlock();
+	HAL_FLASHEx_DATAEEPROM_Program(FLASH_TYPEPROGRAM_WORD, 0x08080000, 0);
+	HAL_FLASHEx_DATAEEPROM_Lock();
+
 	write_enable();
 
 	uint32_t sector = 0;
@@ -104,6 +108,23 @@ void erase_first_sector()
 
 	_spi_flash_cs_low();
 	HAL_SPI_Transmit(&hspi2, sector_erase, sizeof(sector_erase), 0xFFFFFFFF);
+	_spi_flash_cs_high();
+
+	wait_for_write();
+}
+
+void storage_erase_full()
+{
+	HAL_FLASHEx_DATAEEPROM_Unlock();
+	HAL_FLASHEx_DATAEEPROM_Program(FLASH_TYPEPROGRAM_WORD, 0x08080000, 0);
+	HAL_FLASHEx_DATAEEPROM_Lock();
+
+	write_enable();
+
+	uint8_t erase = 0x60;
+
+	_spi_flash_cs_low();
+	HAL_SPI_Transmit(&hspi2, &erase, sizeof(erase), 0xFFFFFFFF);
 	_spi_flash_cs_high();
 
 	wait_for_write();

@@ -55,6 +55,8 @@
 uint8_t write = 0;
 uint8_t read_all = 0;
 uint8_t log_temperature = 0;
+uint8_t chip_erase = 0;
+uint8_t update_time = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -83,6 +85,11 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
 {
     rtc_alarm_elapsed();
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	data_received_from_pc();
 }
 /* USER CODE END 0 */
 
@@ -123,7 +130,7 @@ int main(void)
   tmp112_sensor_init(0x48, tmp112_i2c_tx_func, tmp112_i2c_rx_func);
   button_init(process_device_event);
   dev_time_init(process_device_event);
-  //erase_first_sector();
+  pc_comms_init(process_device_event);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -158,6 +165,19 @@ int main(void)
 		  read_all = 0;
 	  }
 
+	  if (chip_erase)
+	  {
+		  storage_erase_full();
+		  chip_erase = 0;
+		  char done[] = "<<";
+		  HAL_UART_Transmit(&huart1, done, sizeof(done), 0xFFFFFFFF);
+	  }
+
+	  if (update_time)
+	  {
+		  dev_time_set(pc_comms_yy, pc_comms_mm, pc_comms_dd, pc_comms_hh, pc_comms_min, pc_comms_ss);
+          update_time = 0;
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -226,6 +246,10 @@ void process_device_event(uint32_t event)
 	if (event == DEVICE_EVENT_LONG_BUTTON_PRESS)
 	{
 		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+	}
+
+	if (event == DEVICE_EVENT_CHIP_READ)
+	{
 		read_all = 1;
 	}
 
@@ -233,6 +257,16 @@ void process_device_event(uint32_t event)
 	{
 		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
 		log_temperature = 1;
+	}
+
+	if (event == DEVICE_EVENT_CHIP_ERASE)
+	{
+		chip_erase = 1;
+	}
+
+	if (event == DEVICE_EVENT_UPDATE_TIME)
+	{
+		update_time = 1;
 	}
 }
 

@@ -33,7 +33,7 @@ uint32_t get_epoch_timestamp()
 	c_time.tm_min = curr_time.Minutes;
 	c_time.tm_hour = curr_time.Hours;
 	c_time.tm_mday = curr_date.Date;
-	c_time.tm_mon = curr_date.Month;
+	c_time.tm_mon = curr_date.Month - 1;
 	c_time.tm_year = 2000 + curr_date.Year - 1900;
 	c_time.tm_wday = curr_date.WeekDay;
 
@@ -56,6 +56,30 @@ void set_next_alarm()
 	HAL_RTC_GetTime(&hrtc,  &curr_time, RTC_FORMAT_BIN);
     uint8_t alarm_seconds = (curr_time.Seconds + 10) % 60;
     set_next_temperature_log_time(0, 0, alarm_seconds);
+}
+
+void dev_time_set(uint8_t yy, uint8_t mm, uint8_t dd, uint8_t hh, uint8_t min, uint8_t ss)
+{
+	RTC_TimeTypeDef sTime = {0};
+	RTC_DateTypeDef sDate = {0};
+
+	sTime.Hours = hh;
+	sTime.Minutes = min;
+	sTime.Seconds = ss;
+	sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+	sTime.StoreOperation = RTC_STOREOPERATION_RESET;
+	if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
+	{
+		Error_Handler();
+	}
+	sDate.Month = mm;
+	sDate.Date = dd;
+	sDate.Year = yy;
+
+	if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)
+	{
+		Error_Handler();
+	}
 }
 
 void set_next_temperature_log_time(uint8_t hour, uint8_t minute, uint8_t second)
