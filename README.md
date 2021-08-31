@@ -1,2 +1,3 @@
-# temperature_logger
-UOP Temperature Logger Workshop
+# Temperature Logger
+
+A temperature logger project to start learning fundamentals of product design.
