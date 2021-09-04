@@ -8,6 +8,7 @@
 #include "button.h"
 #include "gpio.h"
 #include "tim.h"
+#include "dev_operation_tracker.h"
 
 static void button_pressed();
 static void button_depressed();
@@ -25,6 +26,7 @@ void button_init(event_cb cb)
 
 void process_button_event()
 {
+	dev_operation_start(DEV_OPERATION_BUTTON);
 	GPIO_PinState pin_state = HAL_GPIO_ReadPin(USER_BUTTON_GPIO_Port, USER_BUTTON_Pin);
 	if (pin_state == GPIO_PIN_SET)
 	{
@@ -52,7 +54,7 @@ void button_pressed()
 	single_press_started = 1;
 	press_and_hold_time = 0;
 
-	HAL_TIM_OC_Start_IT(&htim2, TIM_CHANNEL_1);
+	HAL_TIM_OC_Start_IT(&htim21, TIM_CHANNEL_1);
 }
 
 void button_depressed()
@@ -63,6 +65,6 @@ void button_depressed()
 	}
 
 	single_press_started = 0;
-	HAL_TIM_OC_Stop_IT(&htim2, TIM_CHANNEL_1);
-	HAL_TIM_OC_Init(&htim2);
+	HAL_TIM_OC_Stop_IT(&htim21, TIM_CHANNEL_1);
+	HAL_TIM_OC_Init(&htim21);
 }

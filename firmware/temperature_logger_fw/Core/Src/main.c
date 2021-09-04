@@ -28,11 +28,14 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "event_manager.h"
 #include "button.h"
 #include "storage.h"
 #include "pc_comms.h"
 #include "dev_time.h"
 #include "tmp112_sensor.h"
+#include "dev_led.h"
+#include "dev_operation_tracker.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,17 +55,18 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t write = 0;
-uint8_t read_all = 0;
-uint8_t log_temperature = 0;
-uint8_t chip_erase = 0;
-uint8_t update_time = 0;
+uint8_t is_in_config = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void process_device_event(uint32_t event);
+void log_temperature();
+void chip_read();
+void chip_erase();
+void update_time();
+void change_alarm();
+void indicate_alarm();
 void tmp112_i2c_tx_func(uint8_t address, uint8_t* data, size_t size);
 void tmp112_i2c_rx_func(uint8_t address, uint8_t* read_data, size_t size);
 /* USER CODE END PFP */
@@ -74,11 +78,23 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	process_button_event();
 }
 
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim == &htim2)
+	{
+		dev_led_low_done();
+	}
+}
+
 void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	if (htim == &htim2 && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
+	if (htim == &htim21 && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
 	{
 		button_press_and_hold();
+	}
+	else if(htim == &htim2 && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
+	{
+		dev_led_high_done();
 	}
 }
 
@@ -126,58 +142,83 @@ int main(void)
   MX_USART1_UART_Init();
   MX_RTC_Init();
   MX_I2C1_Init();
+  MX_TIM21_Init();
   /* USER CODE BEGIN 2 */
   tmp112_sensor_init(0x48, tmp112_i2c_tx_func, tmp112_i2c_rx_func);
-  button_init(process_device_event);
-  dev_time_init(process_device_event);
-  pc_comms_init(process_device_event);
+  button_init(submit_event);
+  dev_time_init(submit_event);
+  pc_comms_init(submit_event);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
+  uint8_t was_in_config = is_in_config;
   while (1)
   {
-	  if (log_temperature)
+      event_id ev = get_next_event();
+
+	  if (!is_in_config && DEVICE_EVENT_NONE == ev && !dev_operation_is_pending())
 	  {
-		  set_next_alarm();
-		  double true_temp = tmp112_sensor_get_temperature();
-		  int32_t logged_temp = true_temp * 10000;
-		  uint32_t date = get_epoch_timestamp();
-		  temperature_reading temp = {date, logged_temp};
-		  storage_write(temp);
-		  log_temperature = 0;
+		  HAL_SuspendTick();
+		  HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
+		  SystemClock_Config();
 	  }
 
-	  if (read_all)
-	  {
-          const storage_values* vals = 0;
-		  vals = storage_read_start();
+      switch(ev)
+      {
+          case DEVICE_EVENT_RTC_ALARM_ELAPSED:
+              log_temperature();
+              break;
 
-          while (vals -> count != 0)
-          {
-              for (int i = 0; i < vals->count; i++)
+          case DEVICE_EVENT_CHIP_READ:
+              if (is_in_config)
               {
-                  send_temperature_reading(&(vals->readings[i]));
+            	  chip_read();
               }
-              vals = storage_read_cont();
-          }
-		  read_all = 0;
-	  }
+              break;
 
-	  if (chip_erase)
+          case DEVICE_EVENT_LONG_BUTTON_PRESS:
+              is_in_config = ~is_in_config;
+              break;
+
+          case DEVICE_EVENT_CHIP_ERASE:
+              if (is_in_config)
+              {
+                  chip_erase();
+              }
+              break;
+
+          case DEVICE_EVENT_UPDATE_TIME:
+              if (is_in_config)
+              {
+            	  update_time();
+              }
+              break;
+
+          case DEVICE_EVENT_SINGLE_BUTTON_PRESS:
+              if (is_in_config)
+              {
+                  change_alarm();
+              }
+              else
+              {
+                  indicate_alarm();
+              }
+              break;
+
+          default:
+              break;
+      }
+
+	  if (is_in_config != was_in_config)
 	  {
-		  storage_erase_full();
-		  chip_erase = 0;
-		  char done[] = "<<";
+		  char done[] = "<<M";
 		  HAL_UART_Transmit(&huart1, done, sizeof(done), 0xFFFFFFFF);
+          indicate_alarm();
+		  was_in_config = is_in_config;
 	  }
 
-	  if (update_time)
-	  {
-		  dev_time_set(pc_comms_yy, pc_comms_mm, pc_comms_dd, pc_comms_hh, pc_comms_min, pc_comms_ss);
-          update_time = 0;
-	  }
+      complete_event(ev);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -235,39 +276,55 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void process_device_event(uint32_t event)
+void log_temperature()
 {
-	if (event == DEVICE_EVENT_SINGLE_BUTTON_PRESS)
-	{
-		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-		log_temperature = 1;
-	}
+    set_next_alarm();
+    double true_temp = tmp112_sensor_get_temperature();
+    int32_t logged_temp = true_temp * 10000;
+    uint32_t date = get_epoch_timestamp();
+    temperature_reading temp = {date, logged_temp};
+    storage_write(temp);
+}
 
-	if (event == DEVICE_EVENT_LONG_BUTTON_PRESS)
-	{
-		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-	}
+void chip_read()
+{
+    const storage_values* vals = storage_read_start();
 
-	if (event == DEVICE_EVENT_CHIP_READ)
-	{
-		read_all = 1;
-	}
+    while (vals -> count != 0)
+    {
+      for (int i = 0; i < vals->count; i++)
+      {
+          send_temperature_reading(&(vals->readings[i]));
+      }
+      vals = storage_read_cont();
+    }
+}
 
-	if (event == DEVICE_EVENT_RTC_ALARM_ELAPSED)
-	{
-		HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-		log_temperature = 1;
-	}
+void chip_erase()
+{
+    storage_erase_full();
+    char done[] = "<<E";
+    HAL_UART_Transmit(&huart1, done, sizeof(done), 0xFFFFFFFF);
+}
 
-	if (event == DEVICE_EVENT_CHIP_ERASE)
-	{
-		chip_erase = 1;
-	}
+void update_time()
+{
+    dev_time_set(pc_comms_yy, pc_comms_mm, pc_comms_dd, pc_comms_hh, pc_comms_min, pc_comms_ss);
+    char done[] = "<<T";
+    HAL_UART_Transmit(&huart1, done, sizeof(done), 0xFFFFFFFF);
+}
 
-	if (event == DEVICE_EVENT_UPDATE_TIME)
-	{
-		update_time = 1;
-	}
+void change_alarm()
+{
+    dev_time_alarm_change();
+    indicate_alarm();
+}
+
+void indicate_alarm()
+{
+    uint8_t alarm = dev_time_get_alarm();
+    dev_led_indicate_alarm(alarm);
+    dev_operation_complete(DEV_OPERATION_BUTTON);
 }
 
 void tmp112_i2c_tx_func(uint8_t address, uint8_t* data, size_t size)

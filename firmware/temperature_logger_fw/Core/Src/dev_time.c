@@ -14,6 +14,7 @@
 static void set_next_temperature_log_time(uint8_t hour, uint8_t minute, uint8_t second);
 static event_cb device_event_cb = 0;
 
+static uint8_t current_alarm = 0;
 
 void rtc_alarm_elapsed()
 {
@@ -48,14 +49,65 @@ void dev_time_init(event_cb cb)
     set_next_alarm();
 }
 
+uint8_t dev_time_alarm_change()
+{
+	if (current_alarm == 0x00)
+	{
+		current_alarm = DEV_ALARM_1_MINS;
+	}
+	else if (current_alarm == DEV_ALARM_60_MINS)
+	{
+		current_alarm = 0x00;
+	}
+	else
+	{
+		current_alarm = current_alarm << 1;
+	}
+
+	set_next_alarm();
+
+	return current_alarm;
+}
+
+uint8_t dev_time_get_alarm()
+{
+	return current_alarm;
+}
+
 void set_next_alarm()
 {
 	RTC_TimeTypeDef curr_time;
 	RTC_DateTypeDef curr_date;
 	HAL_RTC_GetDate(&hrtc,  &curr_date, RTC_FORMAT_BIN);
 	HAL_RTC_GetTime(&hrtc,  &curr_time, RTC_FORMAT_BIN);
-    uint8_t alarm_seconds = (curr_time.Seconds + 10) % 60;
-    set_next_temperature_log_time(0, 0, alarm_seconds);
+
+	uint8_t interval = 0;
+	if (current_alarm == DEV_ALARM_1_MINS)
+	{
+		interval = 1;
+	}
+	else if (current_alarm == DEV_ALARM_15_MINS)
+	{
+		interval = 15;
+	}
+	else if (current_alarm == DEV_ALARM_30_MINS)
+	{
+		interval = 30;
+	}
+	else if (current_alarm == DEV_ALARM_60_MINS)
+	{
+		interval = 60;
+	}
+
+	if (interval > 0)
+	{
+		uint8_t alarm_minutes = (curr_time.Minutes + interval) % 60;
+		set_next_temperature_log_time(0, alarm_minutes, 0);
+	}
+	else
+	{
+		HAL_RTC_DeactivateAlarm(&hrtc, RTC_ALARM_A);
+	}
 }
 
 void dev_time_set(uint8_t yy, uint8_t mm, uint8_t dd, uint8_t hh, uint8_t min, uint8_t ss)
@@ -87,12 +139,12 @@ void set_next_temperature_log_time(uint8_t hour, uint8_t minute, uint8_t second)
 	RTC_AlarmTypeDef alarm = {0};
 
 	alarm.AlarmTime.Hours = 0;
-	alarm.AlarmTime.Minutes = 0;
-	alarm.AlarmTime.Seconds = second;
+	alarm.AlarmTime.Minutes = minute;
+	alarm.AlarmTime.Seconds = 0;
 	alarm.AlarmTime.SubSeconds = 0;
 	alarm.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
 	alarm.AlarmTime.StoreOperation = RTC_STOREOPERATION_RESET;
-	alarm.AlarmMask = RTC_ALARMMASK_DATEWEEKDAY | RTC_ALARMMASK_HOURS | RTC_ALARMMASK_MINUTES;
+	alarm.AlarmMask = RTC_ALARMMASK_DATEWEEKDAY | RTC_ALARMMASK_HOURS;
 	alarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_ALL;
 	alarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_WEEKDAY;
 	alarm.AlarmDateWeekDay = 1;

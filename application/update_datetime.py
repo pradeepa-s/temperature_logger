@@ -13,8 +13,10 @@ hour = current_dt.hour
 minute = current_dt.minute
 second = current_dt.second
 
+# *****T<year><month><day><hour><minute><seconds>
 packed_bytes = struct.pack("cccccc", bytes([year]), bytes([month]), bytes([day]), bytes([hour]), bytes([minute]), bytes([second]))
 command_start = b'*****T'
 
 full_command = command_start + packed_bytes
 ser.write(full_command)
+
