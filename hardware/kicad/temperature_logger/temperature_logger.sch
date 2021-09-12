@@ -4,10 +4,10 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 2
-Title ""
-Date ""
-Rev ""
-Comp ""
+Title "Temperature Logger"
+Date "2021-09-12"
+Rev "1"
+Comp "PradS"
 Comment1 ""
 Comment2 ""
 Comment3 ""
@@ -566,12 +566,12 @@ FLASH_SO
 $Comp
 L Device:R_Small R8
 U 1 1 60CFBBE0
-P 6950 2200
-F 0 "R8" H 7009 2246 50  0000 L CNN
-F 1 "1k" H 7009 2155 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 6950 2200 50  0001 C CNN
-F 3 "~" H 6950 2200 50  0001 C CNN
-	1    6950 2200
+P 10100 2600
+F 0 "R8" H 10159 2646 50  0000 L CNN
+F 1 "1k" H 10159 2555 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 10100 2600 50  0001 C CNN
+F 3 "~" H 10100 2600 50  0001 C CNN
+	1    10100 2600
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -579,25 +579,25 @@ Wire Wire Line
 Text Label 7850 2100 0    50   ~ 0
 BOOT0
 Wire Wire Line
-	6950 2100 6950 1900
+	10100 2500 10100 2300
 Wire Wire Line
-	6950 1900 7500 1900
+	10100 2300 10650 2300
 $Comp
 L power:GND #PWR?
 U 1 1 60D0521D
-P 6950 2450
+P 10100 2850
 AR Path="/60E10242/60D0521D" Ref="#PWR?"  Part="1" 
 AR Path="/60D0521D" Ref="#PWR011"  Part="1" 
-F 0 "#PWR011" H 6950 2200 50  0001 C CNN
-F 1 "GND" H 6955 2277 50  0000 C CNN
-F 2 "" H 6950 2450 50  0001 C CNN
-F 3 "" H 6950 2450 50  0001 C CNN
-	1    6950 2450
+F 0 "#PWR011" H 10100 2600 50  0001 C CNN
+F 1 "GND" H 10105 2677 50  0000 C CNN
+F 2 "" H 10100 2850 50  0001 C CNN
+F 3 "" H 10100 2850 50  0001 C CNN
+	1    10100 2850
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6950 2300 6950 2450
-Text Label 7500 1900 2    50   ~ 0
+	10100 2700 10100 2850
+Text Label 10650 2300 2    50   ~ 0
 BOOT0
 Wire Wire Line
 	9100 1450 9200 1450
@@ -941,4 +941,14 @@ Wire Wire Line
 Connection ~ 2800 5500
 Wire Wire Line
 	2800 5500 2850 5500
+Wire Notes Line
+	11150 700  7600 700 
+Wire Notes Line
+	7600 700  7600 5750
+Wire Notes Line
+	7600 5750 11150 5750
+Wire Notes Line
+	11150 5750 11150 700 
+Text Notes 7850 5550 0    50   ~ 10
+Microcontroller
 $EndSCHEMATC
