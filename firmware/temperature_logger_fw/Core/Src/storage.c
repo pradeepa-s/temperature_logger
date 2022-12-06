@@ -5,6 +5,7 @@
  *      Author: Pradeepa
  */
 
+#if 0
 #include "storage.h"
 #include "spi.h"
 #include <string.h>
@@ -201,3 +202,4 @@ void _spi_flash_cs_high()
 {
 	HAL_GPIO_WritePin(SPI_CSN_GPIO_Port, SPI_CSN_Pin, GPIO_PIN_SET);
 }
+#endif

@@ -28,9 +28,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdlib.h>
+#include <stdio.h>
 #include "event_manager.h"
 #include "button.h"
-#include "storage.h"
+#include "storage_controller.h"
 #include "pc_comms.h"
 #include "dev_time.h"
 #include "tmp112_sensor.h"
@@ -65,6 +67,7 @@ void log_temperature();
 void chip_read();
 void chip_erase();
 void update_time();
+void get_state();
 void change_alarm();
 void indicate_alarm();
 void tmp112_i2c_tx_func(uint8_t address, uint8_t* data, size_t size);
@@ -153,15 +156,92 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   uint8_t was_in_config = is_in_config;
+
+#ifdef STARTUP_TEST
+  for (int i = 0; i < 12; i++)
+  {
+	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_3);
+	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
+	  HAL_Delay(250);
+  }
+
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
+  while(1)
+  {
+	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_3);
+	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
+	  HAL_Delay(1000);
+  }
+#endif
+
+#ifdef PRINT_TIME
+  while(1)
+  {
+	  Timestamp ts;
+	  get_timestamp(&ts);
+	  HAL_UART_Transmit(&huart1, ts.buffer, sizeof(ts.buffer), 0xFFFFFFFF);
+	  HAL_Delay(1000);
+  }
+#endif
+
+#ifdef STORAGE_READ_WRITE
+  {
+	  flash_storage_erase_full();
+
+	  storage_entry se;
+	  se.dt.year = 2022;
+	  se.dt.month = 11;
+	  se.dt.date = 18;
+	  se.dt.hour = 21;
+
+	  // Create 1000 dummy data items
+	  for (int i = 0; i < 100; i++)
+	  {
+		  se.tr = i % 50;
+		  se.dt.minute = i / 60;
+		  se.dt.seconds = i % 60;
+		  flash_storage_write(&se, 1);
+	  }
+
+	  int turn = 0;
+	  while (1)
+	  {
+		  int count = flash_storage_read(&se, 1);
+
+		  if (count)
+		  {
+			  const datetime* dt = &(se.dt);
+
+			  char reading[34] = {0};
+			  snprintf(reading, sizeof(reading), "\r\n[%04d].%04d:%02d:%02d:%02d:%02d:%02d:%04d",
+					turn, dt->year, dt->month, dt->date, dt->hour, dt->minute, dt->seconds,
+					se.tr);
+			  HAL_UART_Transmit(&huart1, (uint8_t*)reading, sizeof(reading), 0xFFFFFFFF);
+			  turn++;
+			  HAL_Delay(200);
+		  }
+		  else
+		  {
+			  while(1);
+		  }
+	  }
+  }
+#endif
+
+
+  // TODO: Find next write address
+  storage_controller_init();
+
   while (1)
   {
       event_id ev = get_next_event();
 
 	  if (!is_in_config && DEVICE_EVENT_NONE == ev && !dev_operation_is_pending())
 	  {
-		  HAL_SuspendTick();
-		  HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
-		  SystemClock_Config();
+		  //HAL_SuspendTick();
+		  //__HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
+		  //HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
+		  //SystemClock_Config();
 	  }
 
       switch(ev)
@@ -184,7 +264,14 @@ int main(void)
           case DEVICE_EVENT_CHIP_ERASE:
               if (is_in_config)
               {
+            	  // TODO:
+            	  // stop logging
                   chip_erase();
+                  // start logging
+              }
+              else
+              {
+            	  // TODO: Send error
               }
               break;
 
@@ -192,6 +279,13 @@ int main(void)
               if (is_in_config)
               {
             	  update_time();
+              }
+              break;
+
+          case DEVICE_EVENT_GET_STATE:
+              if (is_in_config)
+              {
+            	  get_state();
               }
               break;
 
@@ -213,9 +307,18 @@ int main(void)
 	  if (is_in_config != was_in_config)
 	  {
 		  char done[] = "<<M";
-		  HAL_UART_Transmit(&huart1, done, sizeof(done), 0xFFFFFFFF);
+		  HAL_UART_Transmit(&huart1, (uint8_t*)done, sizeof(done), 0xFFFFFFFF);
           indicate_alarm();
 		  was_in_config = is_in_config;
+
+		  if (is_in_config)
+		  {
+			  HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_SET);
+		  }
+		  else
+		  {
+			  HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_RESET);
+		  }
 	  }
 
       complete_event(ev);
@@ -239,6 +342,7 @@ void SystemClock_Config(void)
   /** Configure the main internal regulator output voltage
   */
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
@@ -251,6 +355,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
   /** Initializes the CPU, AHB and APB buses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
@@ -278,40 +383,70 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void log_temperature()
 {
+    //char done[] = "<<L";
+    //HAL_UART_Transmit(&huart1, (uint8_t*)done, sizeof(done), 0xFFFFFFFF);
+	storage_entry se;
     set_next_alarm();
     double true_temp = tmp112_sensor_get_temperature();
-    int32_t logged_temp = true_temp * 10000;
-    uint32_t date = get_epoch_timestamp();
-    temperature_reading temp = {date, logged_temp};
-    storage_write(temp);
+    se.tr = true_temp * 10000;
+    get_datetime(&(se.dt));
+    flash_storage_write(&se, 1);
 }
 
 void chip_read()
 {
-    const storage_values* vals = storage_read_start();
+    flash_storage_read_start();
 
-    while (vals -> count != 0)
+    int read_index = 0;
+    while (1)
     {
-      for (int i = 0; i < vals->count; i++)
-      {
-          send_temperature_reading(&(vals->readings[i]));
-      }
-      vals = storage_read_cont();
-    }
+		storage_entry se;
+
+		int count = flash_storage_read(&se, 1);
+
+		if (count)
+		{
+		  const datetime* dt = &(se.dt);
+
+		  char reading[34] = {0};
+		  snprintf(reading, sizeof(reading), "\r\n[%04d].%04d:%02d:%02d:%02d:%02d:%02d:%04d",
+				  read_index, dt->year, dt->month, dt->date, dt->hour, dt->minute, dt->second,
+				se.tr);
+		  HAL_UART_Transmit(&huart1, (uint8_t*)reading, sizeof(reading), 0xFFFFFFFF);
+		  ++read_index;
+		  HAL_Delay(50);
+		}
+		else
+		{
+		  return;
+		}
+	}
 }
 
 void chip_erase()
 {
-    storage_erase_full();
+	flash_storage_erase_full();
     char done[] = "<<E";
-    HAL_UART_Transmit(&huart1, done, sizeof(done), 0xFFFFFFFF);
+    HAL_UART_Transmit(&huart1, (uint8_t*)done, sizeof(done), 0xFFFFFFFF);
 }
 
 void update_time()
 {
     dev_time_set(pc_comms_yy, pc_comms_mm, pc_comms_dd, pc_comms_hh, pc_comms_min, pc_comms_ss);
     char done[] = "<<T";
-    HAL_UART_Transmit(&huart1, done, sizeof(done), 0xFFFFFFFF);
+    HAL_UART_Transmit(&huart1, (uint8_t*)done, sizeof(done), 0xFFFFFFFF);
+}
+
+void get_state()
+{
+	datetime dt;
+    double true_temp = tmp112_sensor_get_temperature();
+    temperature tr = true_temp * 10000;
+    get_datetime(&dt);
+    char status[27] = {0};
+	snprintf(status, sizeof(status), "%04d:%02d:%02d:%02d:%02d:%02d:%04d\r\n",
+		  dt.year, dt.month, dt.date, dt.hour, dt.minute, dt.second, tr);
+    HAL_UART_Transmit(&huart1, (uint8_t*)status, sizeof(status), 0xFFFFFFFF);
 }
 
 void change_alarm()
@@ -366,5 +501,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

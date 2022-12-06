@@ -29,7 +29,6 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l0xx_hal.h"
-#include "stm32l0xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -66,6 +65,8 @@ void Error_Handler(void);
 #define USER_BUTTON_EXTI_IRQn EXTI4_15_IRQn
 #define LED_GREEN_Pin GPIO_PIN_3
 #define LED_GREEN_GPIO_Port GPIOB
+#define LED_BLUE_Pin GPIO_PIN_4
+#define LED_BLUE_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
@@ -75,5 +76,3 @@ void Error_Handler(void);
 #endif
 
 #endif /* __MAIN_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

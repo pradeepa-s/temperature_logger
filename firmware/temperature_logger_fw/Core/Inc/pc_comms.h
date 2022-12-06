@@ -19,7 +19,6 @@ extern uint8_t pc_comms_min;
 extern uint8_t pc_comms_ss;
 
 void pc_comms_init(event_cb cb);
-void send_temperature_reading(const temperature_reading* reading);
 void data_received_from_pc();
 
 #endif /* INC_PC_COMMS_H_ */

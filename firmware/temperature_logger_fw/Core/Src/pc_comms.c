@@ -32,17 +32,6 @@ void pc_comms_init(event_cb cb)
 	HAL_UART_Receive_IT(&huart1, recieve_buffer, next_read_size);
 }
 
-void send_temperature_reading(const temperature_reading* reading)
-{
-    /*
-       0x | datetime    | : | temperature in integer | \r | \n
-       0x | max 8 chars | : | 7 chars                | \r | \n
-   */
-    uint8_t output[30];
-    int length = sprintf(output, "0x%X:%d\n", reading->datetime, reading->value);
-    HAL_UART_Transmit(&huart1, output, length, 0xFFFFFFFF);
-}
-
 void data_received_from_pc()
 {
 	process(0);
@@ -88,6 +77,12 @@ void process(uint8_t index)
 			// Chip read
 			reading_time = 1;
 			next_read_size = 6;
+		}
+		else if (recieve_buffer[index] == 'S')
+		{
+			// Chip read
+			device_event_cb(DEVICE_EVENT_GET_STATE);
+			star_count = 0;
 		}
 	}
 	else

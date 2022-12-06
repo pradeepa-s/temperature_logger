@@ -8,6 +8,7 @@
 #ifndef INC_STORAGE_H_
 #define INC_STORAGE_H_
 
+#if 0
 #include <stdint.h>
 #include <stddef.h>
 
@@ -33,5 +34,6 @@ const storage_values* storage_read_cont();
 
 void erase_first_sector();
 void storage_erase_full();
+#endif
 
 #endif /* INC_STORAGE_H_ */
