@@ -16,6 +16,17 @@
   *
   ******************************************************************************
   */
+
+// TODO
+
+// - Check RTC time drift
+// - Check power consumption
+// - Check power switching
+// - Check min battery voltage
+// - Blink LED when erasing
+// - Blink LED when reading
+
+
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -147,6 +158,7 @@ int main(void)
   MX_I2C1_Init();
   MX_TIM21_Init();
   /* USER CODE BEGIN 2 */
+
   tmp112_sensor_init(0x48, tmp112_i2c_tx_func, tmp112_i2c_rx_func);
   button_init(submit_event);
   dev_time_init(submit_event);
@@ -232,16 +244,20 @@ int main(void)
   // TODO: Find next write address
   storage_controller_init();
 
+  HAL_DBGMCU_EnableDBGStopMode();
+
   while (1)
   {
       event_id ev = get_next_event();
 
 	  if (!is_in_config && DEVICE_EVENT_NONE == ev && !dev_operation_is_pending())
 	  {
-		  //HAL_SuspendTick();
-		  //__HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
-		  //HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
-		  //SystemClock_Config();
+		  HAL_SuspendTick();
+		  __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
+		  HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
+
+		  SystemClock_Config();
+		  ev = get_next_event();
 	  }
 
       switch(ev)

@@ -82,27 +82,25 @@ void set_next_alarm()
 	uint8_t interval = 0;
 	if (current_alarm == DEV_ALARM_1_MINS)
 	{
-		interval = 2;
+		interval = 1;
 	}
 	else if (current_alarm == DEV_ALARM_15_MINS)
 	{
-		interval = 5;
+		interval = 15;
 	}
 	else if (current_alarm == DEV_ALARM_30_MINS)
 	{
-		interval = 10;
+		interval = 30;
 	}
 	else if (current_alarm == DEV_ALARM_60_MINS)
 	{
-		interval = 15;
+		interval = 60;
 	}
 
 	if (interval > 0)
 	{
-		//uint8_t alarm_minutes = (curr_time.Minutes + interval) % 60;
-		//set_next_temperature_log_time(0, alarm_minutes, 0);
-		uint8_t alarm_seconds = (curr_time.Seconds + interval) % 60;
-		set_next_temperature_log_time(0, 0, alarm_seconds);
+		uint8_t alarm = (curr_time.Minutes + interval) % 60;
+		set_next_temperature_log_time(0, alarm, 0);
 
 	}
 	else
@@ -145,7 +143,7 @@ void set_next_temperature_log_time(uint8_t hour, uint8_t minute, uint8_t second)
 	alarm.AlarmTime.SubSeconds = 0;
 	alarm.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
 	alarm.AlarmTime.StoreOperation = RTC_STOREOPERATION_RESET;
-	alarm.AlarmMask = RTC_ALARMMASK_DATEWEEKDAY | RTC_ALARMMASK_HOURS | RTC_ALARMMASK_MINUTES;
+	alarm.AlarmMask = RTC_ALARMMASK_DATEWEEKDAY | RTC_ALARMMASK_HOURS;
 	alarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_ALL;
 	alarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_WEEKDAY;
 	alarm.AlarmDateWeekDay = 1;

@@ -26,10 +26,10 @@ void button_init(event_cb cb)
 
 void process_button_event()
 {
-	dev_operation_start(DEV_OPERATION_BUTTON);
 	GPIO_PinState pin_state = HAL_GPIO_ReadPin(USER_BUTTON_GPIO_Port, USER_BUTTON_Pin);
 	if (pin_state == GPIO_PIN_SET)
 	{
+		dev_operation_start(DEV_OPERATION_BUTTON);
 		button_pressed();
 	}
 	else
@@ -64,6 +64,7 @@ void button_depressed()
 		callback_func(DEVICE_EVENT_SINGLE_BUTTON_PRESS);
 	}
 
+	dev_operation_complete(DEV_OPERATION_BUTTON);
 	single_press_started = 0;
 	HAL_TIM_OC_Stop_IT(&htim21, TIM_CHANNEL_1);
 	HAL_TIM_OC_Init(&htim21);
