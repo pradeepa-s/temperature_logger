@@ -1,3 +1,5 @@
 (sym_lib_table
-  (lib (name temperature_logger)(type Legacy)(uri ${KIPRJMOD}/temperature_logger.lib)(options "")(descr ""))
+  (version 7)
+  (lib (name "temperature_logger")(type "Legacy")(uri "${KIPRJMOD}/temperature_logger.lib")(options "")(descr ""))
+  (lib (name "Library")(type "KiCad")(uri "${KIPRJMOD}/symbols/Library.kicad_sym")(options "")(descr ""))
 )
