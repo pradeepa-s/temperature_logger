@@ -10,6 +10,5 @@
 
 void dbg_printf(const char *format, ...);
 void run_uart_scheduler();
-void wait();
 
 #endif /* INC_DEBUG_PRINTF_H_ */

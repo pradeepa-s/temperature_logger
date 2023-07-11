@@ -69,8 +69,3 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 	}
 	is_transmit_pending = 0;
 }
-
-void wait()
-{
-	while(is_transmit_pending);
-}
