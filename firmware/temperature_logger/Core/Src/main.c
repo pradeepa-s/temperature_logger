@@ -23,6 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
 #include "debug_printf.h"
 /* USER CODE END Includes */
 
@@ -88,17 +89,16 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  setbuf(stdout, NULL);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint32_t value = 0;
   while (1)
   {
-  	  dbg_printf("Value is: %d\n\r", value);
-  	  value++;
 	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
+	  dbg_printf("Message");
+	  run_uart_scheduler();
 	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
