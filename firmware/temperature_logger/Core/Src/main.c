@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -25,6 +26,7 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include "debug_printf.h"
+#include "tmp112.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -88,6 +90,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
   setbuf(stdout, NULL);
   /* USER CODE END 2 */
@@ -96,8 +99,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  dbg_printf("Temperature: %d\n\r", tmp112_read_temperature());
+
 	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
-	  dbg_printf("Message");
 	  run_uart_scheduler();
 	  HAL_Delay(1000);
     /* USER CODE END WHILE */
@@ -146,8 +150,9 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1|RCC_PERIPHCLK_I2C1;
   PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
+  PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_PCLK1;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
