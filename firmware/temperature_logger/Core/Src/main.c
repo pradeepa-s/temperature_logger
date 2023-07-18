@@ -26,6 +26,7 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include "debug_printf.h"
+#include "tmp112.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -98,18 +99,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  uint8_t register_address[1] = {0x00};
-	  uint8_t temperature_reading[2] = {0x00, 0x00};
-
-	  HAL_I2C_Master_Transmit(&hi2c1, 0x48 << 1, register_address,sizeof(register_address), 0xFFFFFFFF);
-	  HAL_I2C_Master_Receive(&hi2c1, 0x48 << 1, temperature_reading, sizeof(temperature_reading), 0xFFFFFFFF);
-
-	  uint16_t raw_reading = (((temperature_reading[0] << 8) | temperature_reading[1]) >> 4);
-
-	  // To avoid floating point calculations:
-	  // 0.0625 * 10000 = 625
-	  uint32_t temperature_c = raw_reading * 625;
-	  dbg_printf("Temperature: %d\n\r", temperature_c);
+	  dbg_printf("Temperature: %d\n\r", tmp112_read_temperature());
 
 	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
 	  run_uart_scheduler();
