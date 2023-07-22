@@ -5,10 +5,10 @@
  *      Author: prade
  */
 
-#include "debug_printf.h"
-#include <stdio.h>
-#include <string.h>
+#include "dbg_printf.h"
 #include "usart.h"
+#include <string.h>
+#include <stdio.h>
 
 #define DEBUG_MSG_BUFFER_SIZE (100)
 
@@ -19,9 +19,9 @@ static uint8_t read_index = 0;
 static uint8_t data_size = 0;
 static uint8_t is_transmit_pending = 0;
 
-void dbg_printf(const char *format, ...)
+void dbg_printf_init()
 {
-	printf(format);
+	setbuf(stdout, NULL);
 }
 
 int __io_putchar(int ch)
