@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "i2c.h"
 #include "rtc.h"
 #include "usart.h"
@@ -25,6 +26,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "transport_layer.h"
 #include "dbg_printf.h"
 #include <stdio.h>
 #include "tmp112.h"
@@ -91,11 +93,13 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_USART1_UART_Init();
   MX_I2C1_Init();
   MX_RTC_Init();
   /* USER CODE BEGIN 2 */
   dbg_printf_init();
+  tl_add_tx_data_provider(dbg_printf_is_data_available, dbg_printf_get_data);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -104,14 +108,13 @@ int main(void)
   {
 	  const datetime dt = get_datetime();
 
-	  printf("%d:%d:%d:%d:%d:%d\n\r",
-			  dt.date, dt.month, dt.year,
-			  dt.hour, dt.minute, dt.second);
-
-	  printf("Temperature: %d\n\r", tmp112_read_temperature());
+	  DBG_PRINTF("Temperature: %d\n", tmp112_read_temperature());
+	  DBG_PRINTF("%d:%d:%d:%d:%d:%d\n",
+	  			  dt.date, dt.month, dt.year,
+  			  dt.hour, dt.minute, dt.second);
 
 	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
-	  run_uart_scheduler();
+	  tl_poll_for_tx_data();
 	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
