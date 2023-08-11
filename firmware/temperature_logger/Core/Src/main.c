@@ -62,7 +62,10 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void receive()
+{
+	DBG_PRINTF("Received");
+}
 /* USER CODE END 0 */
 
 /**
@@ -100,6 +103,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   dbg_printf_init();
   tl_add_tx_data_provider(dbg_printf_is_data_available, dbg_printf_get_data);
+  tl_init_rx(receive);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -108,10 +112,10 @@ int main(void)
   {
 	  const datetime dt = get_datetime();
 
-	  DBG_PRINTF("Temperature: %d\n", tmp112_read_temperature());
-	  DBG_PRINTF("%d:%d:%d:%d:%d:%d\n",
-	  			  dt.date, dt.month, dt.year,
-  			  dt.hour, dt.minute, dt.second);
+//	  DBG_PRINTF("Temperature: %d\n", tmp112_read_temperature());
+//	  DBG_PRINTF("%d:%d:%d:%d:%d:%d\n",
+//	  			  dt.date, dt.month, dt.year,
+//  			  dt.hour, dt.minute, dt.second);
 
 	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
 	  tl_poll_for_tx_data();
