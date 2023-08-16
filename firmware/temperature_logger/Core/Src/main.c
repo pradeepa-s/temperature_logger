@@ -28,9 +28,9 @@
 /* USER CODE BEGIN Includes */
 #include "transport_layer.h"
 #include "dbg_printf.h"
-#include <stdio.h>
 #include "tmp112.h"
 #include "datetime.h"
+#include "command_parser.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -62,10 +62,6 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void receive()
-{
-	DBG_PRINTF("Received");
-}
 /* USER CODE END 0 */
 
 /**
@@ -103,14 +99,14 @@ int main(void)
   /* USER CODE BEGIN 2 */
   dbg_printf_init();
   tl_add_tx_data_provider(dbg_printf_is_data_available, dbg_printf_get_data);
-  tl_init_rx(receive);
+  tl_init_rx(cmd_parser_submit_data);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  const datetime dt = get_datetime();
+	  //const datetime dt = get_datetime();
 
 //	  DBG_PRINTF("Temperature: %d\n", tmp112_read_temperature());
 //	  DBG_PRINTF("%d:%d:%d:%d:%d:%d\n",
@@ -119,6 +115,7 @@ int main(void)
 
 	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
 	  tl_poll_for_tx_data();
+	  cmd_parser_process_command();
 	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 

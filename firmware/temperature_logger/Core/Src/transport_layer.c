@@ -121,11 +121,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	{
 		rx_buffer[write_index] = rx_byte;
 		write_index++;
-		rx_length--;
 
-		if (rx_length == 0)
+		if (rx_length == write_index)
 		{
-			rx_completed();
+			rx_completed(rx_buffer, rx_length);
 			rx_reset();
 		}
 	}
