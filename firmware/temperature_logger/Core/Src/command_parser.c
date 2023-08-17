@@ -9,11 +9,18 @@
 #include "dbg_printf.h"
 #include <string.h>
 
-#define CMD_BUFFER_SIZE (10)
+#define CMD_BUFFER_SIZE (16)
 #define TLOG_COMMAND (0x01)
 #define CMD_HEADER_SIZE (3)
 
-#define GET_STATUS (0x00)
+// Data packet indexes
+#define CMD_TYPE_INDEX (0)
+#define CMD_LENGTH_INDEX (1)
+#define CMD_DATA_INDEX (3)
+
+// Command codes
+#define GET_STATUS_CMD (0x00)
+
 static uint8_t is_cmd_processing = 0;
 static uint8_t cmd_buffer[CMD_BUFFER_SIZE] = {};
 
@@ -34,11 +41,11 @@ void cmd_parser_process_command()
 {
 	if (is_cmd_processing)
 	{
-		const uint8_t cmd_type = cmd_buffer[0];
+		const uint8_t cmd_type = cmd_buffer[CMD_TYPE_INDEX];
 
 		if (cmd_type == TLOG_COMMAND)
 		{
-			decode_command_header(&cmd_buffer[1]);
+			decode_command_header(&cmd_buffer[CMD_LENGTH_INDEX]);
 		}
 		else
 		{
@@ -59,13 +66,13 @@ void decode_command_header(const uint8_t *buffer)
 	}
 	else
 	{
-		decode_command(cmd, &buffer[3], data_length);
+		decode_command(cmd, &buffer[CMD_DATA_INDEX], data_length);
 	}
 }
 
 void decode_command(uint8_t cmd, const uint8_t *buffer, const uint16_t length)
 {
-	if (cmd == GET_STATUS)
+	if (cmd == GET_STATUS_CMD)
 	{
 		DBG_PRINTF("GetStatus");
 	}
