@@ -31,6 +31,7 @@
 #include "tmp112.h"
 #include "datetime.h"
 #include "command_parser.h"
+#include "response_generator.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -99,6 +100,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   dbg_printf_init();
   tl_add_tx_data_provider(dbg_printf_is_data_available, dbg_printf_get_data);
+  tl_add_tx_data_provider(rg_is_response_ready, rg_read_response);
   tl_init_rx(cmd_parser_submit_data);
   /* USER CODE END 2 */
 

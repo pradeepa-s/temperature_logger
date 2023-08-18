@@ -13,7 +13,8 @@
 #define TL_TX_HEADER_SIZE (3)
 #define TL_TX_DATA_SIZE (256)
 #define TL_SOH (0x01)
-#define MAX_PRESENTATION_LAYERS (1)
+
+#define MAX_PRESENTATION_LAYERS (2)
 
 typedef struct{
 	TL_DATA_STATUS_FUNC is_data_available;

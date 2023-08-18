@@ -7,6 +7,7 @@
 
 #include "command_parser.h"
 #include "dbg_printf.h"
+#include "response_generator.h"
 #include <string.h>
 
 #define CMD_BUFFER_SIZE (16)
@@ -74,7 +75,7 @@ void decode_command(uint8_t cmd, const uint8_t *buffer, const uint16_t length)
 {
 	if (cmd == GET_STATUS_CMD)
 	{
-		DBG_PRINTF("GetStatus");
+		rg_generate_get_status_response();
 	}
 
 	is_cmd_processing = 0;

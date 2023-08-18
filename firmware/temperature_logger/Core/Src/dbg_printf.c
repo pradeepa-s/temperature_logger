@@ -29,7 +29,7 @@ uint8_t dbg_printf_is_data_available()
 	return data_size > 0;
 }
 
-uint16_t dbg_printf_get_data(uint8_t *out_buffer, size_t size)
+uint16_t dbg_printf_get_data(uint8_t *out_buffer, const size_t size)
 {
 	// Header
 	out_buffer[0] = 0x00;
