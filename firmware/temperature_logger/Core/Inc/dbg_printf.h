@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <stdio.h>
 
 #define USE_DBG_PRINTF
 
@@ -21,6 +22,6 @@
 
 void dbg_printf_init();
 uint8_t dbg_printf_is_data_available();
-uint16_t dbg_printf_get_data(uint8_t *out_buffer, size_t size);
+uint16_t dbg_printf_get_data(uint8_t *out_buffer, const size_t size);
 
 #endif /* INC_DBG_PRINTF_H_ */
