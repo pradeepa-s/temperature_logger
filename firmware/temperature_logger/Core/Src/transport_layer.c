@@ -74,6 +74,7 @@ void tl_poll_for_tx_data()
 			tx_buffer[2] = (length >> 8) & 0x00FF;
 
 			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*)&tx_buffer, length + TL_TX_HEADER_SIZE);
+			break;
 		}
 	}
 }
