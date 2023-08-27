@@ -21,6 +21,7 @@
 
 // Command codes
 #define GET_STATUS_CMD (0x00)
+#define SET_DATETIME_CMD (0x01)
 
 static uint8_t is_cmd_processing = 0;
 static uint8_t cmd_buffer[CMD_BUFFER_SIZE] = {};
@@ -76,6 +77,10 @@ void decode_command(uint8_t cmd, const uint8_t *buffer, const uint16_t length)
 	if (cmd == GET_STATUS_CMD)
 	{
 		rg_generate_get_status_response();
+	}
+	else if (cmd == SET_DATETIME_CMD)
+	{
+		rg_process_set_datetime_cmd(buffer, length);
 	}
 
 	is_cmd_processing = 0;

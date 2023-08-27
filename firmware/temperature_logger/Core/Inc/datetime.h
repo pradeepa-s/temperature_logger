@@ -21,5 +21,6 @@ typedef struct
 } datetime;
 
 datetime get_datetime();
+int set_datetime(const datetime dt);
 
 #endif /* INC_DATETIME_H_ */
