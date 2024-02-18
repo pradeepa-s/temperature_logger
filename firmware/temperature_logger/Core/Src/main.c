@@ -33,6 +33,7 @@
 #include "datetime.h"
 #include "command_parser.h"
 #include "response_generator.h"
+#include "storage_manager.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -121,6 +122,8 @@ int main(void)
 	  tl_poll_for_tx_data();
 	  cmd_parser_process_command();
 	  HAL_Delay(1000);
+
+	  // sm_chip_erase();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
