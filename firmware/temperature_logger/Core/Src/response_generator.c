@@ -8,6 +8,7 @@
 #include "response_generator.h"
 #include "tmp112.h"
 #include "datetime.h"
+#include "storage_manager.h"
 #include <string.h>
 
 #define GET_STATUS_RESPONSE_SIZE (14)
@@ -99,4 +100,18 @@ void rg_process_set_datetime_cmd(const uint8_t* buffer, const uint16_t length)
 		is_response_ready = 1;
 		response_length = 5;
 	}
+}
+
+void rg_generate_chip_erase_response()
+{
+	sm_chip_erase();
+
+	response[0] = 0x02;   // Response
+	response[1] = 0x02;   // SetDatetime function
+	response[2] = 0x00;   // No error
+	response[3] = 0x00;   // Length
+	response[4] = 0x00;   // Length
+
+	is_response_ready = 1;
+	response_length = 5;
 }

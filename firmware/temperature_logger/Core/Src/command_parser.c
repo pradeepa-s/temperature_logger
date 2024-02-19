@@ -22,6 +22,7 @@
 // Command codes
 #define GET_STATUS_CMD (0x00)
 #define SET_DATETIME_CMD (0x01)
+#define CHIP_ERASE_CMD (0x02)
 
 static uint8_t is_cmd_processing = 0;
 static uint8_t cmd_buffer[CMD_BUFFER_SIZE] = {};
@@ -81,6 +82,10 @@ void decode_command(uint8_t cmd, const uint8_t *buffer, const uint16_t length)
 	else if (cmd == SET_DATETIME_CMD)
 	{
 		rg_process_set_datetime_cmd(buffer, length);
+	}
+	else if (cmd == CHIP_ERASE_CMD)
+	{
+		rg_generate_chip_erase_response();
 	}
 
 	is_cmd_processing = 0;
