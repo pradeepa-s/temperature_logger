@@ -21,6 +21,7 @@
 #include "dma.h"
 #include "i2c.h"
 #include "rtc.h"
+#include "spi.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -32,6 +33,7 @@
 #include "datetime.h"
 #include "command_parser.h"
 #include "response_generator.h"
+#include "storage_manager.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -97,6 +99,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_I2C1_Init();
   MX_RTC_Init();
+  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
   dbg_printf_init();
   tl_add_tx_data_provider(dbg_printf_is_data_available, dbg_printf_get_data);
@@ -119,6 +122,8 @@ int main(void)
 	  tl_poll_for_tx_data();
 	  cmd_parser_process_command();
 	  HAL_Delay(1000);
+
+	  // sm_chip_erase();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

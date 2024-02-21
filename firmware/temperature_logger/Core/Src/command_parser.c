@@ -8,6 +8,7 @@
 #include "command_parser.h"
 #include "dbg_printf.h"
 #include "response_generator.h"
+#include "command_defs.h"
 #include <string.h>
 
 #define CMD_BUFFER_SIZE (16)
@@ -18,10 +19,6 @@
 #define CMD_TYPE_INDEX (0)
 #define CMD_LENGTH_INDEX (1)
 #define CMD_DATA_INDEX (3)
-
-// Command codes
-#define GET_STATUS_CMD (0x00)
-#define SET_DATETIME_CMD (0x01)
 
 static uint8_t is_cmd_processing = 0;
 static uint8_t cmd_buffer[CMD_BUFFER_SIZE] = {};
@@ -81,6 +78,10 @@ void decode_command(uint8_t cmd, const uint8_t *buffer, const uint16_t length)
 	else if (cmd == SET_DATETIME_CMD)
 	{
 		rg_process_set_datetime_cmd(buffer, length);
+	}
+	else if (cmd == CHIP_ERASE_CMD)
+	{
+		rg_generate_chip_erase_response();
 	}
 
 	is_cmd_processing = 0;
